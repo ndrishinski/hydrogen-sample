@@ -1,7 +1,7 @@
 import {createHydrogenContext} from '@shopify/hydrogen';
 import {AppSession} from '~/lib/session';
 import {CART_QUERY_FRAGMENT} from '~/lib/fragments';
-
+import {createRickAndMortyClient} from './app/lib/createRickAndMortyClient.server';
 /**
  * The context implementation is separate from server.ts
  * so that type can be extracted for AppLoadContext
@@ -35,8 +35,15 @@ export async function createAppLoadContext(request, env, executionContext) {
     },
   });
 
+  const rickAndMorty = createRickAndMortyClient({
+    cache,
+    waitUntil,
+    request,
+  });
+
   return {
     ...hydrogenContext,
+    rickAndMorty,
     // declare additional Remix loader context
   };
 }
